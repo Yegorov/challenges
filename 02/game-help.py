@@ -12,13 +12,25 @@ NUM_LETTERS = 7
 
 def draw_letters():
     """Pick NUM_LETTERS letters randomly. Hint: use stdlib random"""
-    pass
+    return [random.choice(POUCH) for _ in range(NUM_LETTERS)]
 
 
 def input_word(draw):
     """Ask player for a word.
     Validations: 1) only use letters of draw, 2) valid dictionary word"""
-    pass
+    def is_valid(word):
+        for ch in word.upper():
+            if ch not in draw:
+                return False
+        if word.lower() not in DICTIONARY:
+            return False
+        return True
+        
+    word = None
+    while not word:
+        word = input()
+        word = word if is_valid(word) else None
+    return word
 
 
 # From challenge 01:
@@ -34,14 +46,20 @@ def calc_word_value(word):
 def get_possible_dict_words(draw):
     """Get all possible words from draw which are valid dictionary words.
     Use the _get_permutations_draw helper and DICTIONARY constant"""
-    pass
-
+    def is_valid_word(word):
+        if word.lower() not in DICTIONARY:
+            return False
+        return True
+    return list(filter(is_valid_word, _get_permutations_draw(draw)))
 
 def _get_permutations_draw(draw):
     """Helper for get_possible_dict_words to get all permutations of draw letters.
     Hint: use itertools.permutations"""
-    pass
-
+    a = []
+    for num in range(1, len(LETTER_SCORES) + 1):
+        for w in itertools.permutations(draw, num):
+            a.append(''.join(w))
+    return a
 
 # From challenge 01:
 def max_word_value(words):
