@@ -14,13 +14,17 @@ def get_tags():
     """Find all tags (TAG_HTML) in RSS_FEED.
     Replace dash with whitespace.
     Hint: use TAG_HTML.findall"""
-    pass
+    tags = None
+    with open(RSS_FEED, 'r', encoding='utf-8') as f:
+        s = f.read()
+        tags = list(map(lambda x: x.replace('-', ' ').lower(), TAG_HTML.findall(s)))
+    return tags
 
 
 def get_top_tags(tags):
     """Get the TOP_NUMBER of most common tags
     Hint: use most_common method of Counter (already imported)"""
-    pass
+    return Counter(tags).most_common(TOP_NUMBER)
 
 
 def get_similarities(tags):
@@ -28,7 +32,20 @@ def get_similarities(tags):
     Hint 1: compare each tag, use for in for, or product from itertools (already imported)
     Hint 2: use SequenceMatcher (imported) to calculate the similarity ratio
     Bonus: for performance gain compare the first char of each tag in pair and continue if not the same"""
-    pass
+    def make_seq_matcher():
+        seq_mat = SequenceMatcher()
+        def filter_ratio(tags_seq):
+            if tags_seq[0][0] != tags_seq[1][0]:
+                return False
+            seq_mat.set_seqs(*tags_seq)
+            return tags_seq[0] != tags_seq[1] and \
+                   tags_seq[1][-1] == 's' and \
+                   seq_mat.ratio() > SIMILAR
+        return filter_ratio
+        
+    pairs = product(set(tags), repeat=2)
+    filter_tags = filter(make_seq_matcher(), pairs)
+    return filter_tags
 
 
 if __name__ == "__main__":
@@ -42,3 +59,4 @@ if __name__ == "__main__":
     print('* Similar tags:')
     for singular, plural in similar_tags.items():
         print('{:<20} {}'.format(singular, plural))
+    
