@@ -32,6 +32,9 @@ def input_word(draw):
         word = word if is_valid(word) else None
     return word
 
+def _validation(word, draw):
+    """Validations: 1) only use letters of draw, 2) valid dictionary word"""
+    pass
 
 # From challenge 01:
 def calc_word_value(word):
