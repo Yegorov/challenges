@@ -15,7 +15,7 @@ TWEETS = (
 USER = UserTweets(HANDLE, max_id=MAX_ID)
 
 def read_csv():
-    with open(USER.output_file) as f:
+    with open(USER.output_file, 'r', encoding='utf-8') as f:
         r = csv.reader(f)
         next(r, None)  # skip the headers
         return list(r) 
